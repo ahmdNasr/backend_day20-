@@ -8,6 +8,7 @@ const { createNewProduct } = require("./use-cases/create-new-product")
 const { registerUser } = require("./use-cases/register-user")
 const { addProductToUserWishlist } = require("./use-cases/add-product-to-user-whishlist")
 const { login } = require("./use-cases/login-user")
+const { doAuthMiddleware } = require("./auth/auth-middleware")
 
 const PORT = process.env.PORT || 1818
 const app = express()
@@ -46,8 +47,7 @@ app.get("/api/products/single/:id", (req, res) => {
     }
 })
 
-// DO AUTH
-app.post("/api/products/add", (req, res) => {
+app.post("/api/products/add", doAuthMiddleware, (req, res) => {
     const handleError = error => res.status(500).json({ err: error.message || "Unknown error while creating new product." })
     try {
         const productInfo = req.body
@@ -90,16 +90,14 @@ app.post("/api/users/login", (req, res) => {
     } catch (err) {
         handleError(err)
     }
-
 })
 
-// DO AUTH
-app.post("/api/users/addToWishlist", (req, res) => {
+app.post("/api/users/addToWishlist", doAuthMiddleware, (req, res) => {
     const handleError = error => res.status(500).json({ err: error.message || "Unknown error while adding product to user whishlist." })
     try {
-        const userId = req.body.userId
+        const userId = req.userClaims.sub // req.body.userId
         const productId = req.body.productId
-    
+
         addProductToUserWishlist({ userId, productId })
         .then(_ => res.status(201).end())
         .catch(handleError) 
