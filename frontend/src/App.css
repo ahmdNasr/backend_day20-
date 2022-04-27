@@ -72,6 +72,8 @@ nav {
   grid-template-columns: 1fr 1fr 1fr;
   gap: 32px;
   padding: 32px;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
 .product-view {
