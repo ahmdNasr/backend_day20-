@@ -36,3 +36,104 @@
     transform: rotate(360deg);
   }
 }
+
+
+nav {
+  max-width: 100%;
+  background-color: cornsilk;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
+}
+
+.nav-menu-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.login-button, .logout-button, .add-product-button  {
+  color: white;
+  background-color: blue;
+  border: none;
+  border-radius: 6px;
+  padding: 16px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: large;
+}
+
+.logout-button {
+  background-color: grey;
+}
+
+.product-grid-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 32px;
+  padding: 32px;
+}
+
+.product-view {
+  border: 1px solid blue;
+  padding: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.product-view img {
+  max-width: 60%;
+}
+
+.product-is-limited {
+  color: red;
+}
+
+.product-variations {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.product-detail-box {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.product-detail-box img {
+  width: 100%;
+}
+
+.product-variations .variation {
+  list-style: none;
+  border: 1px solid black;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+form {
+  font-size: larger;
+  display: flex;
+  flex-direction: column;
+  width: 480px;
+  margin: 0 auto;
+}
+
+form input, form textarea{
+  padding: 8px;
+  font-size: larger;
+  border-radius: 6px;
+  border: 1px solid black;
+}
+
+.error-message {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid red;
+  color: white;
+  font-size: medium;
+  font-weight: 600;
+  background-color: salmon;
+}
