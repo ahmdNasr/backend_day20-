@@ -6,7 +6,7 @@ const { listAllProducts } = require("./use-cases/list-all-products")
 const { showProduct } = require("./use-cases/show-product")
 const { createNewProduct } = require("./use-cases/create-new-product")
 const { registerUser } = require("./use-cases/register-user")
-const { addProductToUserWishlist } = require("./use-cases/add-product-to-user-whishlist")
+const { addProductToUserWishlist } = require("./use-cases/add-product-to-user-wishlist")
 const { login } = require("./use-cases/login-user")
 const { doAuthMiddleware } = require("./auth/auth-middleware")
 
@@ -99,7 +99,7 @@ app.post("/api/users/addToWishlist", doAuthMiddleware, (req, res) => {
         const productId = req.body.productId
 
         addProductToUserWishlist({ userId, productId })
-        .then(_ => res.status(201).end())
+        .then(wishlist => res.status(201).json({ wishlist }))
         .catch(handleError) 
     } catch(err) {
         handleError(err)

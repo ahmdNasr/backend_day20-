@@ -1,13 +1,9 @@
 const { createRandomSalt, createPasswordHash } = require("../utils/hash")
 
-function makeUser({ _id, name, email, whishlist, createdAt, password, passwordHash, passwordSalt }) {
+function makeUser({ _id, name, email, wishlist, createdAt, password, passwordHash, passwordSalt }) {
     if (typeof name !== "string" || name.trim().length === 0) {
         throw new Error("User name must be a non-empty string")
     }
-
-    // if (!Array.isArray(whishlist)) {
-    //     throw new Error("User whishlist must be an array of product ids.")
-    // }
 
     if(!passwordHash && !password) {
         throw new Error("User must provide a password or passwordHash")
@@ -18,7 +14,7 @@ function makeUser({ _id, name, email, whishlist, createdAt, password, passwordHa
     return {
         name,
         email,
-        whishlist: whishlist || [], // leere whishlist als standard-wert für neue user...
+        wishlist: wishlist || [], // leere wishlist als standard-wert für neue user...
         createdAt: createdAt || Date.now(),
         passwordHash: passwordHash || createPasswordHash(password, _pwSalt),
         passwordSalt: _pwSalt,

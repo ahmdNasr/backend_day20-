@@ -22,10 +22,10 @@ function addProductToUserWishlist({ userId, productId }) {
             const user = makeUser(foundUser)
             const product = makeProduct(foundProduct)
     
-            return { user, product}
+            return UsersDAO.updateUserWishlist(user._id, product._id)
         })
-        .then(({ user, product }) => UsersDAO.updateUserWishlist(user._id, product._id))
-        .then(resolve)
+        .then(() => UsersDAO.findById(userId))
+        .then(user => resolve(user.wishlist))
     })
 }
 
