@@ -7,6 +7,7 @@ const { showProduct } = require("./use-cases/show-product")
 const { createNewProduct } = require("./use-cases/create-new-product")
 const { registerUser } = require("./use-cases/register-user")
 const { addProductToUserWishlist } = require("./use-cases/add-product-to-user-whishlist")
+const { login } = require("./use-cases/login-user")
 
 const PORT = process.env.PORT || 1818
 const app = express()
@@ -45,6 +46,7 @@ app.get("/api/products/single/:id", (req, res) => {
     }
 })
 
+// DO AUTH
 app.post("/api/products/add", (req, res) => {
     const handleError = error => res.status(500).json({ err: error.message || "Unknown error while creating new product." })
     try {
@@ -72,6 +74,26 @@ app.post("/api/users/register", (req, res) => {
     }
 })
 
+app.post("/api/users/login", (req, res) => {
+    const handleError = error => {
+        console.log(error)
+        res.status(404).json({ err: "Not found." }) // Pretend to know nothing ;)
+    }
+
+    try {
+        const email = req.body.email
+        const password = req.body.password
+
+        login({ email, password })
+        .then((token) => res.json({ token }))
+        .catch(handleError)
+    } catch (err) {
+        handleError(err)
+    }
+
+})
+
+// DO AUTH
 app.post("/api/users/addToWishlist", (req, res) => {
     const handleError = error => res.status(500).json({ err: error.message || "Unknown error while adding product to user whishlist." })
     try {

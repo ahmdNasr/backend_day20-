@@ -1,4 +1,4 @@
-const { hash, createRandomSalt } = require("../utils/hash")
+const { createRandomSalt, createPasswordHash } = require("../utils/hash")
 
 function makeUser({ _id, name, email, whishlist, createdAt, password, passwordHash, passwordSalt }) {
     if (typeof name !== "string" || name.trim().length === 0) {
@@ -20,8 +20,8 @@ function makeUser({ _id, name, email, whishlist, createdAt, password, passwordHa
         email,
         whishlist: whishlist || [], // leere whishlist als standard-wert für neue user...
         createdAt: createdAt || Date.now(),
-        passwordHash: passwordHash || hash(password + _pwSalt),
-        passwortSalt: _pwSalt,
+        passwordHash: passwordHash || createPasswordHash(password, _pwSalt),
+        passwordSalt: _pwSalt,
         _id,
     }
 }

@@ -27,8 +27,4 @@ function getDB() {
     })
 }
 
-
-getDB().then(db => db.collection("users").find().toArray()).then(console.log)
-
-
 module.exports = { getDB }
