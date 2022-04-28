@@ -21,88 +21,70 @@ app.get("/", (req, res) => {
     res.send("it works :)")
 })
 
-app.get("/api/products/all", function getAllProductsController(_, res) {
-    const handleError = error => res.status(500).json({ err: error.message || "Unknown error while reading products." })
-    
+app.get("/api/products/all", async function getAllProductsController(_, res) {
     try {
-        listAllProducts()
-        .then(products => res.json(products))
-        .catch(handleError) 
-    } catch (err) {
-        handleError(err)
+        const products = await listAllProducts()
+        res.json(products)
+    } catch (error) {
+        res.status(500).json({ err: error.message || "Unknown error while reading products." })
     }
 })
 
-app.get("/api/products/single/:id", (req, res) => {
-    const handleError = (error) => res.status(500).json({ err: error.message || "Unknown error while reading product." })
-    
+app.get("/api/products/single/:id", async (req, res) => {
     try {
         const id = req.params.id
 
-        showProduct({ productId: id })
-        .then(product => res.json(product))
-        .catch((err) => handleError(err)) 
-    } catch (err) {
-        handleError(err)
+        const product = await showProduct({ productId: id })
+        res.json(product)
+    } catch(error) {
+        res.status(500).json({ err: error.message || "Unknown error while reading product." })
     }
 })
 
-app.post("/api/products/add", doAuthMiddleware, (req, res) => {
-    const handleError = error => res.status(500).json({ err: error.message || "Unknown error while creating new product." })
+app.post("/api/products/add", doAuthMiddleware, async (req, res) => {
     try {
         const productInfo = req.body
 
-        createNewProduct(productInfo)
-        .then(product => res.json(product))
-        .catch(handleError) 
-    } catch (err) {
-        handleError(err)
+        const product = await createNewProduct(productInfo)
+        res.json(product)
+    } catch (error) {
+        res.status(500).json({ err: error.message || "Unknown error while creating new product." })
     }
 })
 
-app.post("/api/users/register", (req, res) => {
-    const handleError = error => res.status(500).json({ err: error.message || "Unknown error while registering new user." })
-    
+app.post("/api/users/register", async (req, res) => {    
     try {
         const userInfo = req.body
 
-        registerUser(userInfo)
-        .then(user => res.json(user))
-        .catch(handleError) 
-    } catch (err) {
-        handleError(err)
+        const user = await registerUser(userInfo)
+        res.json(user)           
+    } catch (error) {
+        res.status(500).json({ err: error.message || "Unknown error while registering new user." })
     }
 })
 
-app.post("/api/users/login", (req, res) => {
-    const handleError = error => {
-        console.log(error)
-        res.status(404).json({ err: "Not found." }) // Pretend to know nothing ;)
-    }
-
+app.post("/api/users/login", async (req, res) => {
     try {
         const email = req.body.email
         const password = req.body.password
 
-        login({ email, password })
-        .then((token) => res.json({ token }))
-        .catch(handleError)
-    } catch (err) {
-        handleError(err)
+        const token = await login({ email, password })
+        res.json({ token })
+    } catch (error) {
+        console.log(error)
+        res.status(404).json({ err: "Not found." }) // Pretend to know nothing ;)
     }
 })
 
-app.post("/api/users/addToWishlist", doAuthMiddleware, (req, res) => {
-    const handleError = error => res.status(500).json({ err: error.message || "Unknown error while adding product to user whishlist." })
+app.post("/api/users/addToWishlist", doAuthMiddleware, async (req, res) => {
     try {
         const userId = req.userClaims.sub // req.body.userId
         const productId = req.body.productId
-
-        addProductToUserWishlist({ userId, productId })
-        .then(wishlist => res.status(201).json({ wishlist }))
-        .catch(handleError) 
-    } catch(err) {
-        handleError(err)
+    
+        const wishlist = await addProductToUserWishlist({ userId, productId })
+        res.status(201).json({ wishlist })
+    } catch (error) {
+        res.status(500).json({ err: error.message || "Unknown error while adding product to user whishlist." })
     }
 })
 

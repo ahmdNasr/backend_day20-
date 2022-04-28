@@ -1,8 +1,9 @@
 const { findById } = require("../db-access/products-dao");
 
-function showProduct({ productId }) {
-    return findById(productId)
-    .then((product) => productToProductView(product))
+async function showProduct({ productId }) {
+    const product = await findById(productId)
+    const productView = productToProductView(product)
+    return productView
 }
 
 function productToProductView(product) {

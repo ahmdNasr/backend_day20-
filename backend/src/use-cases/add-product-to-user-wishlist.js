@@ -3,30 +3,27 @@ const UsersDAO = require("../db-access/users-dao");
 const { makeProduct } = require("../domain/Product");
 const { makeUser } = require("../domain/User");
 
-function addProductToUserWishlist({ userId, productId }) {
-    return new Promise((resolve, reject) => {
-        Promise.all([
-            UsersDAO.findById(userId),
-            ProductsDAO.findById(productId),
-        ]).then(([foundUser, foundProduct]) => {
-            if(!foundUser) {
-                reject({ message: "User with id " + userId + " was not found!" })
-                return
-            }
+async function addProductToUserWishlist({ userId, productId }) {
+    const [foundUser, foundProduct] = await Promise.all([
+        UsersDAO.findById(userId),
+        ProductsDAO.findById(productId),
+    ])
     
-            if(!foundProduct) {
-                reject({ message: "Product with id " + productId + " doesn't exist!" })
-                return
-            }
+    if(!foundUser) {
+        throw { message: "User with id " + userId + " was not found!" }
+    }
+
+    if(!foundProduct) {
+        throw { message: "Product with id " + productId + " doesn't exist!" }
+    }
+
+    const user = makeUser(foundUser)
+    const product = makeProduct(foundProduct)
+
+    await UsersDAO.updateUserWishlist(user._id, product._id)
     
-            const user = makeUser(foundUser)
-            const product = makeProduct(foundProduct)
-    
-            return UsersDAO.updateUserWishlist(user._id, product._id)
-        })
-        .then(() => UsersDAO.findById(userId))
-        .then(user => resolve(user.wishlist))
-    })
+    const updatedUser = await UsersDAO.findById(userId)
+    return updatedUser.wishlist
 }
 
 module.exports = {

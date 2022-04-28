@@ -10,21 +10,20 @@ const databaseName = process.env.DB_NAME
 
 let dbReference;
 
-function getDB() {
-    return new Promise((resolve, reject) => {
-        if (dbReference) {
-            resolve(dbReference)
-        } else {
-            client
-            .connect()
-            .then((connectedClient) => {
-                const db = connectedClient.db(databaseName)
-                dbReference = db; // ganz wichtig: zwischenspeichern, damit beim nächsten aufruf von getDB die connection nicht neu aufgebaut werden muss...
-                resolve(db)
-            })
-            .catch(() => reject({ err: "Failed to connect to database" }))
-        }
-    })
+async function getDB() {
+    if (dbReference) {
+        return dbReference
+    }
+
+    try {
+        const connectedClient = await client.connect()
+        const db = connectedClient.db(databaseName)
+        dbReference = db // zwischenspeichern
+        return db
+    } catch (err) {
+        console.log(err)
+        throw { err: "Failed to connect to database" }
+    }
 }
 
 module.exports = { getDB }

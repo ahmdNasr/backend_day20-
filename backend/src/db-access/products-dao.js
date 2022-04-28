@@ -1,16 +1,22 @@
 const { ObjectId } = require("mongodb")
 const { getDB } = require("./getDB")
 
-function findAllProducts() {
-    return getDB().then(db => db.collection("products").find().toArray())
+async function findAllProducts() {
+    const db = await getDB()
+    const products = await db.collection("products").find().toArray()
+    return products
 }
 
-function findById(id) {
-    return getDB().then(db => db.collection("products").findOne({ _id: new ObjectId(id) }))
+async function findById(id) {
+    const db = await getDB()
+    const product = await db.collection("products").findOne({ _id: new ObjectId(id) })
+    return product
 }
 
-function insertOne(product) {
-    return getDB().then(db => db.collection("products").insertOne(product))
+async function insertOne(product) {
+    const db = await getDB()
+    const result = await db.collection("products").insertOne(product)
+    return result
 }
 
 module.exports = {
