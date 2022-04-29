@@ -31,3 +31,20 @@ function App() {
 }
 
 export default App;
+
+
+// Todo:
+    
+//     * Add Product -> Product image + Variations
+
+//     * Registartion Feature (Form + connect to backend)
+//     * E-Mail Verification
+    
+//     * Refresh Token!!
+
+//     * Add To Wishlist Feature...
+//     * exisitierende Product Variations als Vorschlag beim form
+    
+// New Features:
+//     * Edit Product
+//     * Forgot Password / Password Reset

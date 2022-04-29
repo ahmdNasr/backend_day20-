@@ -7,7 +7,7 @@ const AddProductPage = (props) => {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [price, setPrice] = useState()
-    const [variations, setVariations] = useState()
+    const [variations, setVariations] = useState([])
     const [productImage, setProductImage] = useState(null)
     const [stockCount, setStockCount] = useState()
 
@@ -18,13 +18,24 @@ const AddProductPage = (props) => {
     const addProduct = (event) => {
         event.preventDefault()
 
+        // Create an object of formData 
+        const formData = new FormData(); 
+        
+        // Update the formData object 
+        formData.append("title", title); 
+        formData.append("description", description);
+        formData.append("price", description);
+        formData.append("stockCount", description);
+        formData.append("variations", JSON.stringify(variations));
+        formData.append("productImage", productImage, productImage.name);  // Blob = Binary Large Object
+
         fetch(apiUrl + "/api/products/add", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
+                // "Content-Type": "application/json",
                 token: props.token // !!! HINWEIS: TOKEN MUSS ANS BACKEND GESCHICKT WERDEN, SONST WAR DER LOGIN UNNÖTIG !!!
             },
-            body: JSON.stringify({ title, description, price, stockCount, variations: ["In Palmenöl", "In Olivenöl"] })
+            body: formData // JSON.stringify({ title, description, price, stockCount, variations })
         })
         .then((response) => response.json())
         .then(result => {
@@ -68,7 +79,7 @@ const AddProductPage = (props) => {
                 <label htmlFor="product-image-input">
                     Product Image:
                 </label><br/>
-                <input id="product-image-input" type="file" value={productImage} onChange={(e) => setProductImage(e.target.files[0])} />
+                <input id="product-image-input" type="file" onChange={(e) => setProductImage(e.target.files[0])} />
                 <br/>
 
                 <label htmlFor="stock-count-input">
@@ -87,7 +98,49 @@ const AddProductPage = (props) => {
 }
 
 const VariationsInput = ({ variations, setVariations }) => {
-    return <input placeholder="variations..." />
+    const [newVariation, setNewVariation] = useState("")
+
+    const addNewVariationToVariationsArray = (event) => {
+        event.preventDefault()
+        setVariations([...variations, newVariation]) // wie ein push aber "immutable"
+        // input der new variation leeren
+        setNewVariation("")
+    }
+
+    // === deleteVariation Als Higher Order Function oder auch "Thunk" ===
+    // function deleteVariation(index) {
+    //     return function deleteVariationEventHandler(event) {
+    //         event.preventDefault()
+    //         // filter returned ein neues Array -> wir ändern das alte array nicht (und verstoßen somit nicht gegen Reacts Vorschriften)
+    //         const nextVariationsArray = variations.filter((_, indexOfVar) => indexOfVar !== index)
+    //         setVariations(nextVariationsArray)
+    //     }
+    // }
+
+    function deleteVariation(event, index) {
+        event.preventDefault()
+        // filter returned ein neues Array -> wir ändern das alte array nicht (und verstoßen somit nicht gegen Reacts Vorschriften)
+        const nextVariationsArray = variations.filter((_, indexOfVar) => indexOfVar !== index)
+        setVariations(nextVariationsArray)
+    }
+
+    return <div className="product-variations-input-container">
+        <ul className="product-variations-display">
+            {variations.map((variation, i) => 
+            <li key={i}>
+                <span>{variation}</span>
+                <button onClick={(event) => deleteVariation(event, i)}>❌</button>
+            </li>)}
+        </ul>
+
+        <div className="add-variations-container">
+            <label htmlFor="new-variation-input">
+                Add Variation:
+            </label><br/>
+            <input id="new-variation-input" type="text" value={newVariation} onChange={(e) => setNewVariation(e.target.value)} />
+            <button className="new-variation-button" onClick={addNewVariationToVariationsArray}>+</button>
+        </div>
+    </div>
 }
  
 export default AddProductPage;

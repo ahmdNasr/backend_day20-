@@ -29,11 +29,16 @@ function createToken(user) {
     return token
 }
 
+function imageBufferToBase64(imgBuffer, mimeType) {
+    return "data:" + mimeType + ";base64," + imgBuffer.toString('base64')
+}
+
 module.exports = {
     hash,
     createRandomSalt,
     createPasswordHash,
-    createToken
+    createToken,
+    imageBufferToBase64
 }
 
 // Rainbow Table: Hash <--> Passwort <--> Hash Algo

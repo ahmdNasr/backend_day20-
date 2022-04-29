@@ -52,7 +52,7 @@ nav {
   gap: 8px;
 }
 
-.login-button, .logout-button, .add-product-button  {
+.login-button, .logout-button, .add-product-button, .new-variation-button  {
   color: white;
   background-color: blue;
   border: none;
@@ -138,4 +138,24 @@ form input, form textarea{
   font-size: medium;
   font-weight: 600;
   background-color: salmon;
+}
+
+.product-variations-display li {
+  list-style: none;
+  margin: 8px;
+  border-radius: 6px;
+  border: 1px solid blue;
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
+.product-variations-display span {
+  line-height: 2;
+}
+
+.product-variations-display button {
+  margin: 8px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }

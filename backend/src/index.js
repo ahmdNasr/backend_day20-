@@ -1,6 +1,7 @@
 const cors = require("cors")
 const morgan = require("morgan")
 const express = require("express")
+const multer = require("multer")
 
 const { listAllProducts } = require("./use-cases/list-all-products")
 const { showProduct } = require("./use-cases/show-product")
@@ -9,6 +10,7 @@ const { registerUser } = require("./use-cases/register-user")
 const { addProductToUserWishlist } = require("./use-cases/add-product-to-user-wishlist")
 const { login } = require("./use-cases/login-user")
 const { doAuthMiddleware } = require("./auth/auth-middleware")
+const { imageBufferToBase64 } = require("./utils/hash")
 
 const PORT = process.env.PORT || 1818
 const app = express()
@@ -41,11 +43,16 @@ app.get("/api/products/single/:id", async (req, res) => {
     }
 })
 
-app.post("/api/products/add", doAuthMiddleware, async (req, res) => {
+const upload = multer()
+const uploadMiddleware = upload.single("productImage")
+app.post("/api/products/add", doAuthMiddleware, uploadMiddleware, async (req, res) => {
     try {
         const productInfo = req.body
 
-        const product = await createNewProduct(productInfo)
+        const imageLink = imageBufferToBase64(req.file.buffer, req.file.mimetype,)
+        const variations = JSON.parse(productInfo.variations)
+
+        const product = await createNewProduct({ ...productInfo, variations, imageLink })
         res.json(product)
     } catch (error) {
         res.status(500).json({ err: error.message || "Unknown error while creating new product." })
