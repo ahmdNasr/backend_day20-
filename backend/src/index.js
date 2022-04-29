@@ -66,6 +66,7 @@ app.post("/api/users/register", async (req, res) => {
         const user = await registerUser(userInfo)
         res.json(user)           
     } catch (error) {
+        console.log(error)
         res.status(500).json({ err: error.message || "Unknown error while registering new user." })
     }
 })

@@ -130,7 +130,7 @@ form input, form textarea{
   border: 1px solid black;
 }
 
-.error-message {
+.error-message, .success-message {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid red;
@@ -138,6 +138,11 @@ form input, form textarea{
   font-size: medium;
   font-weight: 600;
   background-color: salmon;
+}
+
+.success-message {
+  border: 1px solid green;
+  background-color: forestgreen;
 }
 
 .product-variations-display li {
