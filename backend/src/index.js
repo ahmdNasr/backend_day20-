@@ -92,6 +92,7 @@ app.get("/api/users/userInfo", doAuthMiddleware, async (req, res) => {
         const userInfo = await showUserInfo({ userId })
         res.status(201).json(userInfo)
     } catch (error) {
+        console.log(error)
         res.status(500).json({ err: error.message || "Unknown error while getting your user info." })
     }
 })

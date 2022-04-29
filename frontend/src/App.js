@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Navigation from './components/Navigation';
 import AddProductPage from './Pages/AddProductPage';
@@ -7,6 +7,7 @@ import AllProductsPage from './Pages/AllProductsPage';
 import LoginPage from './Pages/LoginPage';
 import ProductDetailPage from './Pages/ProductDetailPage';
 import RegistrationPage from './Pages/RegistrationPage';
+import WishlistPage from './Pages/WishlistPage';
 
 function App() {
   const [token, setToken] = useState(null)
@@ -24,6 +25,10 @@ function App() {
 
         <Route path="/login" element={<LoginPage setToken={setToken} />} />
         <Route path="/register" element={<RegistrationPage />} />
+
+        <Route path="/wishlist" element={<WishlistPage token={token} />} />
+
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
      </BrowserRouter>
     </div>

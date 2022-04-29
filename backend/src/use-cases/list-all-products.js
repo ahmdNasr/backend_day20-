@@ -1,15 +1,9 @@
 const { findAllProducts } = require("../db-access/products-dao");
+const { productToProductView } = require("./helpers/functions");
 
 async function listAllProducts() {
     const products = await findAllProducts()
-    const productsView = products.map(p => ({
-        _id: p._id,
-        title: p.title,
-        price: p.price,
-        imageLink: p.imageLink,
-        isAvailible: p.stockCount > 0,
-        isLimited: p.stockCount < 10,
-    }))
+    const productsView = products.map(productToProductView)
     return productsView
 }
 
