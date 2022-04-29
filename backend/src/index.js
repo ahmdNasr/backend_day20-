@@ -9,6 +9,7 @@ const { createNewProduct } = require("./use-cases/create-new-product")
 const { registerUser } = require("./use-cases/register-user")
 const { addProductToUserWishlist } = require("./use-cases/add-product-to-user-wishlist")
 const { login } = require("./use-cases/login-user")
+const { showUserInfo } = require("./use-cases/show-user-info")
 const { doAuthMiddleware } = require("./auth/auth-middleware")
 const { imageBufferToBase64 } = require("./utils/hash")
 
@@ -81,6 +82,17 @@ app.post("/api/users/login", async (req, res) => {
     } catch (error) {
         console.log(error)
         res.status(404).json({ err: "Not found." }) // Pretend to know nothing ;)
+    }
+})
+
+app.get("/api/users/userInfo", doAuthMiddleware, async (req, res) => {
+    try {
+        const userId = req.userClaims.sub // req.body.userId
+    
+        const userInfo = await showUserInfo({ userId })
+        res.status(201).json(userInfo)
+    } catch (error) {
+        res.status(500).json({ err: error.message || "Unknown error while getting your user info." })
     }
 })
 

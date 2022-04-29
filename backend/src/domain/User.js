@@ -1,6 +1,6 @@
 const { createRandomSalt, createPasswordHash } = require("../utils/hash")
 
-function makeUser({ _id, name, email, wishlist, createdAt, password, passwordHash, passwordSalt }) {
+function makeUser({ _id, name, email, wishlist, createdAt, password, passwordHash, passwordSalt, role = "user" }) {
     if (typeof name !== "string" || name.trim().length === 0) {
         throw new Error("User name must be a non-empty string")
     }
